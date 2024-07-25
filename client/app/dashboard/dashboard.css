@@ -1,0 +1,21 @@
+.itemLeft {
+  border-right: 2px solid #429400;
+  width: auto;
+  max-width: 300px; /* You can set this to an appropriate value to fit your content */
+}
+
+.itemRight {
+  border-left: 2px solid #429400;
+}
+
+.leftDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.eachItem {
+  display: flex;
+  flex-direction: column;
+}
+

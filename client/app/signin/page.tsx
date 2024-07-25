@@ -499,7 +499,7 @@ export default function Signin() {
               className="btn btn-outline btn-primary whiteText"
               onClick={googleOauth}
             >
-              Login with{" "}
+              Continue with{" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
