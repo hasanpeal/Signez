@@ -4,8 +4,10 @@ import React, { useState, useRef, KeyboardEvent } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
 import Image from "next/image";
-import "@/app/signin/signin.css"
+import "@/app/signin/signin.css";
 import eye from "@/public/eye.svg";
+import { useRouter } from "next/navigation";
+import { useEmail } from "@/context/UserContext"; 
 
 const Signup: React.FC = () => {
   const [flag, setFlag] = useState(true);
@@ -27,33 +29,33 @@ const Signup: React.FC = () => {
     password: "",
   });
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
-  document.title = "Tweetipy | Signup";
-
   const form = useRef<HTMLFormElement>(null);
+  const router = useRouter();
+  const { setEmailContext } = useEmail();
 
-//   React.useEffect(() => {
-//     const params = new URLSearchParams(window.location.search);
-//     const code = params.get("code");
-//     const message = params.get("message");
-//     const capturedEmail = params.get("email");
-//     const screen_name = params.get("screen_name");
+  //   React.useEffect(() => {
+  //     const params = new URLSearchParams(window.location.search);
+  //     const code = params.get("code");
+  //     const message = params.get("message");
+  //     const capturedEmail = params.get("email");
+  //     const screen_name = params.get("screen_name");
 
-//     if (code) {
-//       if (parseInt(code) === 0) {
-//         setLoad(true);
-//         toast.success(message, {
-//           id: "success1",
-//         });
-//         setUsername(screen_name || "");
-//         setEmail(capturedEmail || "");
-//         navigate("/newuser", { state: { username, email } });
-//       } else {
-//         toast.error(message || "Authentication failed", {
-//           id: "success3",
-//         });
-//       }
-//     }
-//   }, [email, navigate, username]);
+  //     if (code) {
+  //       if (parseInt(code) === 0) {
+  //         setLoad(true);
+  //         toast.success(message, {
+  //           id: "success1",
+  //         });
+  //         setUsername(screen_name || "");
+  //         setEmail(capturedEmail || "");
+  //         navigate("/newuser", { state: { username, email } });
+  //       } else {
+  //         toast.error(message || "Authentication failed", {
+  //           id: "success3",
+  //         });
+  //       }
+  //     }
+  //   }, [email, navigate, username]);
 
   const handleOtpChange = (index: number, value: string) => {
     if (/^[0-9]$/.test(value)) {
@@ -84,7 +86,7 @@ const Signup: React.FC = () => {
   async function emailAlreadyExist() {
     try {
       const result = await axios.get(
-        `${process.env.VITE_SERVER}/validateEmail`,
+        `http://localhost:3001/validateEmail`,
         {
           params: { email: email },
         }
@@ -179,7 +181,7 @@ const Signup: React.FC = () => {
         try {
           setLoad(true);
           const result = await axios.post(
-            `${process.env.VITE_SERVER}/register`,
+            `http://localhost:3001/register`,
             {
               firstName,
               lastName,
@@ -189,10 +191,11 @@ const Signup: React.FC = () => {
           );
 
           if (result) {
-            // navigate("/newuser", { state: { email } });
+            toast.success("Sign up successful")
+            router.push("/signin");
           }
         } catch (error) {
-          // console.log("Error registering user froms signup.tsx");
+          console.log("Error registering user froms signup.tsx");
         }
       } else {
         setVerified(true);
@@ -200,32 +203,24 @@ const Signup: React.FC = () => {
           setVerified(false);
         }, 3000);
       }
-      // console.log("OTP entered:", otp.join(""));
-      // console.log("\nFirst name:", firstName);
-      // console.log("\nLast name:", lastName);
-      // console.log("\nEmail:", email);
-      // console.log("\nPassword:", password);
     }
   };
 
   const generateOtp = async () => {
     try {
-      const result = await axios.post(
-        `${process.env.VITE_SERVER}/sentOTP`,
-        {
-          email: email,
-        }
-      );
+      const result = await axios.post(`http://localhost:3001/sentOTP`, {
+        email: email,
+      });
       setGeneratedOtp(result.data.otp);
     } catch (error) {
-      // console.log("Error calling http://localhost:3000/sentOTP on signup.tsx");
+      console.log("Error calling http://localhost:3000/sentOTP on signup.tsx");
     }
-    // console.log("OTP generated");
+    console.log("OTP generated");
   };
 
-    function googleOauth(): void {
-        throw new Error("Function not implemented.");
-    }
+  function googleOauth(): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <div>
@@ -235,7 +230,7 @@ const Signup: React.FC = () => {
             {" "}
             Sign up
           </article>
-
+          <Toaster/>
           <div>
             <label className="input input-bordered flex items-center gap-2">
               <input
@@ -341,15 +336,6 @@ const Signup: React.FC = () => {
               onClick={handleSignup}
             >
               Sign up
-            </button>
-          )}
-
-          {flag && (
-            <button
-              className="btn btn-outline btn-primary whiteText"
-              onClick={googleOauth}
-            >
-              Sign up with{" "}
             </button>
           )}
 

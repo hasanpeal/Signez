@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 import { useRef, useState, KeyboardEvent } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
@@ -7,6 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import "@/app/signin/signin.css";
 import eye from "@/public/eye.svg";
+import { useEmail } from "@/context/UserContext"; 
 
 export default function Signin() {
   const [email, setEmail] = useState("");
@@ -41,7 +43,8 @@ export default function Signin() {
   const [showPassword3, setShowPassword3] = useState(false);
 
   const form = useRef<HTMLFormElement>(null);
-
+  const { setEmailContext } = useEmail();
+  const router = useRouter(); 
   //   React.useEffect(() => {
   //     const checkSession = async () => {
   //       try {
@@ -99,28 +102,46 @@ export default function Signin() {
   //       }
   //     }
   //   }, [email, navigate, username]);
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const message = params.get("message");
+    const capturedEmail = params.get("emails");
+    if (code) {
+      if (parseInt(code) === 0) {
+        setEmailContext(capturedEmail || "");
+        toast.success(message, {
+          id: "success1",
+        });
+        router.push("/dashboard");
+      } else {
+        toast.error(message || "Authentication failed", {
+          id: "success3",
+        });
+      }
+    }
+  }, [router, setEmailContext]);
 
   async function emailDoesntExist() {
+    console.log("debug 2", email);
     try {
-      const result = await axios.get(
-        `${process.env.VITE_SERVER}/validateEmail`,
-        {
-          params: { email: email },
-        }
-      );
+      const result = await axios.get("http://localhost:3001/validateEmail", {
+        params: { email: email },
+      });
       const code = result.data.code;
-      // console.log("Email exist code: ", code);
-      if (code === 0) return false;
-      else true;
+      console.log("Email exist code: ", code);
+      return code !== 0;
     } catch (err) {
       // console.log("Error in emailAlreadyExist function");
+      return true;
+      console.log("Error triggered");
     }
   }
 
   const handleLogin = async () => {
     if (await validateForm()) {
       try {
-        const result = await axios.post(`${process.env.VITE_SERVER}/login`, {
+        const result = await axios.post("http://localhost:3001/login", {
           email,
           password,
         });
@@ -128,13 +149,11 @@ export default function Signin() {
         if (code === 0) {
           toast.success(message);
           setLoad(true);
-          
-          navigate("/newuser", { state: { email } });
-          
+          setEmailContext(email);
+          router.push("/dashboard");
         } else {
           toast.error(message);
         }
-        
       } catch (err) {
         console.error("Error in handleLogin function in Login.tsx");
       }
@@ -150,7 +169,7 @@ export default function Signin() {
 
   const generateOtp = async () => {
     try {
-      const result = await axios.post(`${process.env.VITE_SERVER}/sentOTP`, {
+      const result = await axios.post(`http://localhost:3001/sentOTP`, {
         email: email,
       });
       setGeneratedOtp(result.data.otp);
@@ -201,6 +220,8 @@ export default function Signin() {
   };
 
   async function validateEmail() {
+    const exist = await emailDoesntExist();
+    console.log("Debug 1", exist);
     const errors = {
       email: "",
     };
@@ -217,9 +238,13 @@ export default function Signin() {
       setTimeout(() => {
         setFormErrors((prevErrors) => ({ ...prevErrors, email: "" }));
       }, 3000);
-    } else if (await emailDoesntExist()) {
-      errors.email = "Email isn't registered";
-      isValid = false;
+    } else {
+      const exist = await emailDoesntExist();
+      console.log("Debug 1", exist);
+      if (exist) {
+        errors.email = "Email isn't registered";
+        isValid = false;
+      }
       setTimeout(() => {
         setFormErrors((prevErrors) => ({ ...prevErrors, email: "" }));
       }, 3000);
@@ -329,6 +354,10 @@ export default function Signin() {
   async function handleSend() {
     // console.log("Handle send function triggered");
     // console.log(formErrors);
+
+    console.log("Handle send function triggered");
+    const isEmailValid = await validateEmail();
+    console.log("Debug 2", isEmailValid);
     if (await validateEmail()) {
       generateOtp();
       setShowOtp(true);
@@ -344,13 +373,10 @@ export default function Signin() {
   async function resetPassword() {
     if (validateNewPassword()) {
       try {
-        const result = await axios.post(
-          `${process.env.VITE_SERVER}/resetPassword`,
-          {
-            email: email,
-            newPassword: confirmNewPassword,
-          }
-        );
+        const result = await axios.post("http://localhost:3001/resetPassword", {
+          email: email,
+          newPassword: confirmNewPassword,
+        });
         if (result.data.code === 0) {
           // console.log("Success resetting password");
           toast.success("Password reset successful");
@@ -358,7 +384,7 @@ export default function Signin() {
           setTimeout(() => {
             window.location.reload();
           }, 1000);
-        }
+        } else toast.error("Error resetting password");
       } catch (err) {
         // console.log("Error resetting password in Login.tsx");
       }
@@ -372,15 +398,15 @@ export default function Signin() {
       }, 3000);
     }
   }
-  function googleOauth(): void {
-    throw new Error("Function not implemented.");
+  async function googleOauth() {
+    window.location.href = "http://localhost:3001/auth/google/signin";
   }
 
   return (
     <div>
       <div className="mainContainer pb-40 mt-36">
         <div className="card bg-base-100 w-96 shadow-xl cardDiv">
-          {/* <Toaster /> */}
+          <Toaster />
           <article className="text-center text-xl text-bold mt-4">
             {" "}
             Login
@@ -474,7 +500,11 @@ export default function Signin() {
               onClick={googleOauth}
             >
               Login with{" "}
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 128 128">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 128 128"
+              >
                 <path
                   fill="#fff"
                   d="M44.59 4.21a63.28 63.28 0 004.33 120.9 67.6 67.6 0 0032.36.35 57.13 57.13 0 0025.9-13.46 57.44 57.44 0 0016-26.26 74.33 74.33 0 001.61-33.58H65.27v24.69h34.47a29.72 29.72 0 01-12.66 19.52 36.16 36.16 0 01-13.93 5.5 41.29 41.29 0 01-15.1 0A37.16 37.16 0 0144 95.74a39.3 39.3 0 01-14.5-19.42 38.31 38.31 0 010-24.63 39.25 39.25 0 019.18-14.91A37.17 37.17 0 0176.13 27a34.28 34.28 0 0113.64 8q5.83-5.8 11.64-11.63c2-2.09 4.18-4.08 6.15-6.22A61.22 61.22 0 0087.2 4.59a64 64 0 00-42.61-.38z"
@@ -512,7 +542,7 @@ export default function Signin() {
               </svg>
               <input
                 type="email"
-                className={`grow ${formErrors.email ? "border-red-500" : ""}`}
+                className={`grow ${emailErrors.email ? "border-red-500" : ""}`}
                 placeholder="Email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
@@ -599,9 +629,11 @@ export default function Signin() {
                   onClick={() => setShowPassword2(!showPassword2)}
                 >
                   <Image
-                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJjb2xvcjojODA1MkY2IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGNsYXNzPSJoLWZ1bGwgdy1mdWxsIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeD0iMCIgeT0iMCIgcng9IjMwIiBmaWxsPSJ0cmFuc3BhcmVudCIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgc3Ryb2tlLXdpZHRoPSIwIiBzdHJva2Utb3BhY2l0eT0iMTAwJSIgcGFpbnQtb3JkZXI9InN0cm9rZSI+PC9yZWN0Pjxzdmcgd2lkdGg9IjI1NnB4IiBoZWlnaHQ9IjI1NnB4IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiBmaWxsPSIjODA1MkY2IiB4PSIxMjgiIHk9IjEyOCIgcm9sZT0iaW1nIiBzdHlsZT0iZGlzcGxheTppbmxpbmUtYmxvY2s7dmVydGljYWwtYWxpZ246bWlkZGxlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIGZpbGw9IiM4MDUyRjYiPjxwYXRoIGZpbGw9ImN1cnJlbnRDb2xvciIgZmlsbC1vcGFjaXR5PSIuMTUiIGQ9Ik04MS44IDUzNy44YTYwLjMgNjAuMyAwIDAgMSAwLTUxLjVDMTc2LjYgMjg2LjUgMzE5LjggMTg2IDUxMiAxODZjLTE5Mi4yIDAtMzM1LjQgMTAwLjUtNDMwLjIgMzAwLjNhNjAuMyA2MC4zIDAgMCAwIDAgNTEuNUMxNzYuNiA3MzcuNSAzMTkuOSA4MzggNTEyIDgzOGMtMTkyLjEgMC0zMzUuNC0xMDAuNS00MzAuMi0zMDAuMnoiPjwvcGF0aD48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGZpbGwtb3BhY2l0eT0iLjE1IiBkPSJNNTEyIDI1OGMtMTYxLjMgMC0yNzkuNCA4MS44LTM2Mi43IDI1NEMyMzIuNiA2ODQuMiAzNTAuNyA3NjYgNTEyIDc2NmMxNjEuNCAwIDI3OS41LTgxLjggMzYyLjctMjU0Qzc5MS40IDMzOS44IDY3My4zIDI1OCA1MTIgMjU4em0tNCA0MzBjLTk3LjIgMC0xNzYtNzguOC0xNzYtMTc2czc4LjgtMTc2IDE3Ni0xNzZzMTc2IDc4LjggMTc2IDE3NnMtNzguOCAxNzYtMTc2IDE3NnoiPjwvcGF0aD48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik05NDIuMiA0ODYuMkM4NDcuNCAyODYuNSA3MDQuMSAxODYgNTEyIDE4NmMtMTkyLjIgMC0zMzUuNCAxMDAuNS00MzAuMiAzMDAuM2E2MC4zIDYwLjMgMCAwIDAgMCA1MS41QzE3Ni42IDczNy41IDMxOS45IDgzOCA1MTIgODM4YzE5Mi4yIDAgMzM1LjQtMTAwLjUgNDMwLjItMzAwLjNjNy43LTE2LjIgNy43LTM1IDAtNTEuNXpNNTEyIDc2NmMtMTYxLjMgMC0yNzkuNC04MS44LTM2Mi43LTI1NEMyMzIuNiAzMzkuOCAzNTAuNyAyNTggNTEyIDI1OHMyNzkuNCA4MS44IDM2Mi43IDI1NEM3OTEuNSA2ODQuMiA2NzMuNCA3NjYgNTEyIDc2NnoiPjwvcGF0aD48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik01MDggMzM2Yy05Ny4yIDAtMTc2IDc4LjgtMTc2IDE3NnM3OC44IDE3NiAxNzYgMTc2czE3Ni03OC44IDE3Ni0xNzZzLTc4LjgtMTc2LTE3Ni0xNzZ6bTAgMjg4Yy02MS45IDAtMTEyLTUwLjEtMTEyLTExMnM1MC4xLTExMiAxMTItMTEyczExMiA1MC4xIDExMiAxMTJzLTUwLjEgMTEyLTExMiAxMTJ6Ij48L3BhdGg+PC9nPjwvc3ZnPjwvc3ZnPg=="
+                    src={eye}
                     alt="eye-twotone"
                     className="showIcon"
+                    width={10}
+                    height={10}
                   />
                 </button>
               </label>
@@ -641,9 +673,11 @@ export default function Signin() {
                   onClick={() => setShowPassword3(!showPassword3)}
                 >
                   <Image
-                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJjb2xvcjojODA1MkY2IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGNsYXNzPSJoLWZ1bGwgdy1mdWxsIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeD0iMCIgeT0iMCIgcng9IjMwIiBmaWxsPSJ0cmFuc3BhcmVudCIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgc3Ryb2tlLXdpZHRoPSIwIiBzdHJva2Utb3BhY2l0eT0iMTAwJSIgcGFpbnQtb3JkZXI9InN0cm9rZSI+PC9yZWN0Pjxzdmcgd2lkdGg9IjI1NnB4IiBoZWlnaHQ9IjI1NnB4IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiBmaWxsPSIjODA1MkY2IiB4PSIxMjgiIHk9IjEyOCIgcm9sZT0iaW1nIiBzdHlsZT0iZGlzcGxheTppbmxpbmUtYmxvY2s7dmVydGljYWwtYWxpZ246bWlkZGxlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIGZpbGw9IiM4MDUyRjYiPjxwYXRoIGZpbGw9ImN1cnJlbnRDb2xvciIgZmlsbC1vcGFjaXR5PSIuMTUiIGQ9Ik04MS44IDUzNy44YTYwLjMgNjAuMyAwIDAgMSAwLTUxLjVDMTc2LjYgMjg2LjUgMzE5LjggMTg2IDUxMiAxODZjLTE5Mi4yIDAtMzM1LjQgMTAwLjUtNDMwLjIgMzAwLjNhNjAuMyA2MC4zIDAgMCAwIDAgNTEuNUMxNzYuNiA3MzcuNSAzMTkuOSA4MzggNTEyIDgzOGMtMTkyLjEgMC0zMzUuNC0xMDAuNS00MzAuMi0zMDAuMnoiPjwvcGF0aD48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGZpbGwtb3BhY2l0eT0iLjE1IiBkPSJNNTEyIDI1OGMtMTYxLjMgMC0yNzkuNCA4MS44LTM2Mi43IDI1NEMyMzIuNiA2ODQuMiAzNTAuNyA3NjYgNTEyIDc2NmMxNjEuNCAwIDI3OS41LTgxLjggMzYyLjctMjU0Qzc5MS40IDMzOS44IDY3My4zIDI1OCA1MTIgMjU4em0tNCA0MzBjLTk3LjIgMC0xNzYtNzguOC0xNzYtMTc2czc4LjgtMTc2IDE3Ni0xNzZzMTc2IDc4LjggMTc2IDE3NnMtNzguOCAxNzYtMTc2IDE3NnoiPjwvcGF0aD48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik05NDIuMiA0ODYuMkM4NDcuNCAyODYuNSA3MDQuMSAxODYgNTEyIDE4NmMtMTkyLjIgMC0zMzUuNCAxMDAuNS00MzAuMiAzMDAuM2E2MC4zIDYwLjMgMCAwIDAgMCA1MS41QzE3Ni42IDczNy41IDMxOS45IDgzOCA1MTIgODM4YzE5Mi4yIDAgMzM1LjQtMTAwLjUgNDMwLjItMzAwLjNjNy43LTE2LjIgNy43LTM1IDAtNTEuNXpNNTEyIDc2NmMtMTYxLjMgMC0yNzkuNC04MS44LTM2Mi43LTI1NEMyMzIuNiAzMzkuOCAzNTAuNyAyNTggNTEyIDI1OHMyNzkuNCA4MS44IDM2Mi43IDI1NEM3OTEuNSA2ODQuMiA2NzMuNCA3NjYgNTEyIDc2NnoiPjwvcGF0aD48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik01MDggMzM2Yy05Ny4yIDAtMTc2IDc4LjgtMTc2IDE3NnM3OC44IDE3NiAxNzYgMTc2czE3Ni03OC44IDE3Ni0xNzZzLTc4LjgtMTc2LTE3Ni0xNzZ6bTAgMjg4Yy02MS45IDAtMTEyLTUwLjEtMTEyLTExMnM1MC4xLTExMiAxMTItMTEyczExMiA1MC4xIDExMiAxMTJzLTUwLjEgMTEyLTExMiAxMTJ6Ij48L3BhdGg+PC9nPjwvc3ZnPjwvc3ZnPg=="
+                    src={eye}
                     alt="eye-twotone"
                     className="showIcon"
+                    width={10}
+                    height={10}
                   />
                 </button>
               </label>
