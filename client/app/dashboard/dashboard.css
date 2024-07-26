@@ -1,5 +1,4 @@
 .itemLeft {
-  border-right: 2px solid #429400;
   width: auto;
   max-width: 300px; /* You can set this to an appropriate value to fit your content */
 }
@@ -19,3 +18,22 @@
   flex-direction: column;
 }
 
+.progress {
+  height: 10px;
+}
+
+video {
+  border-radius: 12px;
+}
+
+.predictedWordContainer {
+  padding: 16px;
+  background: #f7f7f7;
+  border-radius: 8px;
+}
+
+.imageSection {
+  padding: 16px;
+  background: #f7f7f7;
+  border-radius: 8px;
+}

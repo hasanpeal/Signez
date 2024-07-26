@@ -5,7 +5,6 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
 import cors from "cors";
-import sgMail from "@sendgrid/mail";
 import RedisStore from "connect-redis";
 import { createClient } from "redis";
 import { Client } from "pg";
@@ -356,12 +355,10 @@ app.get("/auth/google/callback", (req, res, next) => {
       return next(err);
     }
     if (!user) {
-      return res
-        .status(200)
-        .json({
-          code: 1,
-          message: info ? info.message : "Authentication failed",
-        });
+      return res.status(200).json({
+        code: 1,
+        message: info ? info.message : "Authentication failed",
+      });
     }
 
     const email = user.email;
@@ -424,6 +421,58 @@ app.get("/auth/google/signin", (req, res, next) => {
     res,
     next
   );
+});
+
+// Get alphabet array route
+app.get("/getAlphabetArray", async (req, res) => {
+  console.log("Directed to GET Route -> /getAlphabetArray");
+  const email: string = req.query.email as string;
+  try {
+    const result = await pgClient.query(
+      'SELECT alphabet_array FROM "user" WHERE "email" = $1',
+      [email]
+    );
+    if (result.rows.length > 0) {
+      res
+        .status(200)
+        .json({ code: 0, alphabetArray: result.rows[0].alphabet_array });
+    } else {
+      res.status(200).json({ code: 1, message: "User not found" });
+    }
+  } catch (err) {
+    console.log(
+      "Error retrieving alphabet array on /getAlphabetArray route",
+      err
+    );
+    res
+      .status(500)
+      .json({ code: 1, message: "Error retrieving alphabet array" });
+  }
+});
+
+// Update alphabet array route
+app.post("/updateAlphabetArray", async (req, res) => {
+  console.log("Directed to POST Route -> /updateAlphabetArray");
+  const { email, alphabetArray } = req.body;
+  try {
+    const result = await pgClient.query(
+      'UPDATE "user" SET alphabet_array = $1 WHERE "email" = $2',
+      [alphabetArray, email]
+    );
+    if (result.rowCount !== null && result.rowCount > 0) {
+      res
+        .status(200)
+        .json({ code: 0, message: "Alphabet array updated successfully" });
+    } else {
+      res.status(200).json({ code: 1, message: "User not found" });
+    }
+  } catch (err) {
+    console.log(
+      "Error updating alphabet array on /updateAlphabetArray route",
+      err
+    );
+    res.status(500).json({ code: 1, message: "Error updating alphabet array" });
+  }
 });
 
 app.listen(port, () => {
