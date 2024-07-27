@@ -1,5 +1,4 @@
-"use client";
-// http://127.0.0.1:5000/predict
+"use client"
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import * as handpose from "@tensorflow-models/handpose";
@@ -44,9 +43,12 @@ export default function Dashboard() {
   const [totalProgress, setTotalProgress] = useState<number>(0);
   const [predictedWord, setPredictedWord] =
     useState<string>("NO HAND DETECTED");
+  const [selectedAlphabet, setSelectedAlphabet] = useState<string>("A");
+  const [matchPercentage, setMatchPercentage] = useState<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef<any>(null);
+  const selectedAlphabetRef = useRef<string>(selectedAlphabet);
   const { emailContext } = useEmail();
 
   useEffect(() => {
@@ -120,6 +122,7 @@ export default function Dashboard() {
       await sendFrameToServer(frame);
     } else {
       setPredictedWord("NO HAND DETECTED");
+      setMatchPercentage(null);
     }
 
     requestAnimationFrame(processVideo);
@@ -143,12 +146,27 @@ export default function Dashboard() {
       if (response.data && response.data.prediction) {
         setPredictedWord(response.data.prediction);
         let word = response.data.prediction as string;
-        updateScoreAtIndex(word.charCodeAt(0) - "A".charCodeAt(0));
+        const matchPercentage = calculateMatchPercentage(word);
+        console.log(`Selected Alphabet: ${selectedAlphabetRef.current}`);
+        console.log(`Predicted Word: ${word}`);
+        console.log(`Match Percentage: ${matchPercentage}`);
+        setMatchPercentage(matchPercentage);
+        if (matchPercentage === 100) {
+          updateScoreAtIndex(word.charCodeAt(0) - "A".charCodeAt(0));
+        }
       }
     } catch (error) {
       setPredictedWord("NO HAND DETECTED");
+      setMatchPercentage(null);
       console.error("Error predicting sign language", error);
     }
+  };
+
+  const calculateMatchPercentage = (predicted: string) => {
+    if (predicted === selectedAlphabetRef.current) {
+      return 100;
+    }
+    return 0;
   };
 
   const updateScoreAtIndex = (index: number) => {
@@ -277,11 +295,33 @@ export default function Dashboard() {
             >
               {predictedWord}
             </p>
+            {matchPercentage !== null && (
+              <p className="text-sm text-black">
+                Match Percentage: {matchPercentage}%
+              </p>
+            )}
+            <div className="flex flex-row items-center mb-4">
+              <label className="font-bold text-xl mr-2">Select Alphabet:</label>
+              <select
+                value={selectedAlphabet}
+                onChange={(e) => {
+                  setSelectedAlphabet(e.target.value);
+                  selectedAlphabetRef.current = e.target.value;
+                  console.log(`Alphabet changed to: ${e.target.value}`);
+                }}
+                className="p-2 border rounded-lg"
+              >
+                {alphabet.slice(1).map((letter) => (
+                  <option key={letter} value={letter}>
+                    {letter}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
         <div className="imageSection flex-1 p-4 bg-gray-100 rounded-lg shadow-inner">
           <h3 className="font-bold text-xl mb-2">Image Section:</h3>
-          
         </div>
       </div>
     </div>
