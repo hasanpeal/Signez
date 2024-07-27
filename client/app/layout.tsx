@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="lemonade">
+    <html lang="en" data-theme="light">
       <body className={inter.className}>
         <EmailProvider>{children}</EmailProvider>
       </body>

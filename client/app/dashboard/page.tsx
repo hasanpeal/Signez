@@ -1,5 +1,4 @@
 "use client";
-// Changes from here
 // http://127.0.0.1:5000/predict
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
@@ -8,6 +7,7 @@ import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-backend-webgl";
 import "@tensorflow/tfjs-backend-cpu";
 import "@/app/dashboard/dashboard.css";
+import { useEmail } from "@/context/UserContext";
 
 export default function Dashboard() {
   const alphabet = [
@@ -47,6 +47,7 @@ export default function Dashboard() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef<any>(null);
+  const { emailContext } = useEmail();
 
   useEffect(() => {
     const loadModelAndSetupCamera = async () => {
@@ -83,7 +84,6 @@ export default function Dashboard() {
   const processVideo = useCallback(async () => {
     if (!videoRef.current || !modelRef.current) return;
 
-    // Check if the video is loaded and has valid dimensions
     if (
       videoRef.current.videoWidth === 0 ||
       videoRef.current.videoHeight === 0
@@ -152,23 +152,41 @@ export default function Dashboard() {
   };
 
   const updateScoreAtIndex = (index: number) => {
-    if (index >= 0 && index < scores.length) {
-      const newScores = [...scores];
-      newScores[index] = 100;
-      setScores(newScores);
-    } else {
-      console.error("Index out of bounds");
+    setScores((prevScores) => {
+      if (index >= 0 && index < prevScores.length && prevScores[index] < 100) {
+        const newScores = [...prevScores];
+        newScores[index] = 100;
+        updateScoreInServer(newScores);
+        return newScores;
+      }
+      return prevScores;
+    });
+  };
+
+  const updateScoreInServer = async (updatedScores: number[]) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/updateAlphabetArray",
+        {
+          email: emailContext,
+          alphabetArray: updatedScores,
+        }
+      );
+      if (response.data.code !== 0) {
+        console.error("Error updating alphabet array", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error updating alphabet array", error);
     }
   };
 
   useEffect(() => {
-    // Fetch the alphabet array from the server
     const fetchAlphabetArray = async () => {
       try {
         const response = await axios.get(
           "http://localhost:3001/getAlphabetArray",
           {
-            params: { email: "user@example.com" }, // replace with actual email
+            params: { email: emailContext },
           }
         );
         if (response.data.code === 0) {
@@ -181,38 +199,16 @@ export default function Dashboard() {
     };
 
     fetchAlphabetArray();
-  }, []);
+  }, [emailContext]);
+
+  useEffect(() => {
+    calculateTotalProgress(scores);
+  }, [scores]);
 
   const calculateTotalProgress = (scoresArray: number[]) => {
     const total = scoresArray.reduce((sum, score) => sum + score, 0);
     const percentage = (total / (scoresArray.length * 100)) * 100;
     setTotalProgress(percentage);
-  };
-
-  const updateScore = async (index: number, newScore: number) => {
-    // Update the score in the state
-    const updatedScores = [...scores];
-    updatedScores[index] = newScore;
-    setScores(updatedScores);
-
-    // Recalculate total progress
-    calculateTotalProgress(updatedScores);
-
-    // Logic goes here to trigger the update
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/updateAlphabetArray",
-        {
-          email: "user@example.com", // replace with actual email
-          alphabetArray: updatedScores,
-        }
-      );
-      if (response.data.code !== 0) {
-        console.error("Error updating alphabet array", response.data.message);
-      }
-    } catch (error) {
-      console.error("Error updating alphabet array", error);
-    }
   };
 
   return (
@@ -285,7 +281,7 @@ export default function Dashboard() {
         </div>
         <div className="imageSection flex-1 p-4 bg-gray-100 rounded-lg shadow-inner">
           <h3 className="font-bold text-xl mb-2">Image Section:</h3>
-          {/* Add your image display code here */}
+          
         </div>
       </div>
     </div>
