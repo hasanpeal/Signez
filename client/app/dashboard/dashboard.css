@@ -31,11 +31,11 @@ video {
   background: #f7f7f7;
   border-radius: 8px;
 }
-
+/* 
 .imageSection {
   background: #f7f7f7;
   border-radius: 12px;
-}
+} */
 
 
 
@@ -78,3 +78,11 @@ video {
   background-color: #242C36;
 }
 
+
+
+/* .carousel-item img {
+  object-fit: contain;
+  max-width: 100%;
+  height: auto;
+  display: block;
+} */

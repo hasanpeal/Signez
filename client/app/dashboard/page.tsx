@@ -2,22 +2,42 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
-import Image from "next/image";
 import * as handpose from "@tensorflow-models/handpose";
 import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-backend-webgl";
 import "@tensorflow/tfjs-backend-cpu";
 import "@/app/dashboard/dashboard.css";
 import { useEmail } from "@/context/UserContext";
-import A1 from "@/public/A1.png";
-import A2 from "@/public/A2.png";
-import A3 from "@/public/A3.png";
-
+import Carousel from "@/components/courasel";
 export default function Dashboard() {
   const alphabet = [
-    "Dashboard","A", "B","C","D","E","F","G","H","I",
-    "J","K","L","M","N","O","P","Q","R","S","T","U",
-    "V","W","X","Y","Z",
+    "Dashboard",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
   ];
 
   const [scores, setScores] = useState<number[]>(Array(26).fill(0));
@@ -230,7 +250,6 @@ export default function Dashboard() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      
       <div
         className="relative itemLeft text-black px-6 py-4 overflow-y-auto bg-white shadow-lg"
         style={{ width: "250px" }}
@@ -342,66 +361,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="imageSection flex-1 bg-gray-100 rounded-lg shadow-inner">
-          <div className="carousel w-full">
-            <div id="slide1" className="carousel-item relative w-full">
-              <Image
-                src={A1}
-                className="w-full guides"
-                height={5}
-                width={5}
-                quality={100}
-                layout="responsive"
-                alt="R-Z"
-              />
-              <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                <a href="#slide4" className="btn btn-circle bb">
-                  ❮
-                </a>
-                <a href="#slide2" className="btn btn-circle bb">
-                  ❯
-                </a>
-              </div>
-            </div>
-            <div id="slide2" className="carousel-item relative w-full">
-              <Image
-                src={A2}
-                className="w-full guides"
-                height={5}
-                width={5}
-                quality={100}
-                layout="responsive"
-                alt="R-Z"
-              />
-              <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                <a href="#slide1" className="btn btn-circle bb">
-                  ❮
-                </a>
-                <a href="#slide3" className="btn btn-circle bb">
-                  ❯
-                </a>
-              </div>
-            </div>
-            <div id="slide3" className="carousel-item relative w-full">
-              <Image
-                src={A3}
-                className="w-full guides"
-                height={5}
-                width={5}
-                quality={100}
-                layout="responsive"
-                alt="R-Z"
-              />
-              <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                <a href="#slide2" className="btn btn-circle bb">
-                  ❮
-                </a>
-                <a href="#slide4" className="btn btn-circle bb">
-                  ❯
-                </a>
-              </div>
-            </div>
-          </div>
+        <div className="imageSection flex-1 ">
+          <Carousel />
         </div>
       </div>
     </div>
