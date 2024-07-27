@@ -11,9 +11,9 @@
         "@tensorflow-models/handpose": "^0.1.0",
         "@tensorflow/tfjs": "^4.20.0",
         "axios": "^1.7.2",
-        "next": "^14.2.5",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
+        "next": "14.2.5",
+        "react": "^18",
+        "react-dom": "^18",
         "react-hot-toast": "^2.4.1"
       },
       "devDependencies": {
@@ -449,9 +449,9 @@
       }
     },
     "node_modules/@rushstack/eslint-patch": {
-      "version": "1.10.4",
-      "resolved": "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.10.4.tgz",
-      "integrity": "sha512-WJgX9nzTqknM393q1QJDJmoW28kUfEnybeTfVNcNAPnIx210RXm2DiXiHzfNPJNIUUb1tJnz/l4QGtJ30PgWmA==",
+      "version": "1.10.3",
+      "resolved": "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.10.3.tgz",
+      "integrity": "sha512-qC/xYId4NMebE6w/V33Fh9gWxLgURiNYgVNObbJl2LZv0GUUItCcCqC5axQSwRaAgaxl2mELq1rMzlswaQ0Zxg==",
       "dev": true,
       "license": "MIT"
     },
@@ -597,6 +597,15 @@
       "license": "Apache-2.0 AND MIT",
       "peerDependencies": {
         "@tensorflow/tfjs-core": "4.20.0"
+      }
+    },
+    "node_modules/@tensorflow/tfjs/node_modules/argparse": {
+      "version": "1.0.10",
+      "resolved": "https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz",
+      "integrity": "sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==",
+      "license": "MIT",
+      "dependencies": {
+        "sprintf-js": "~1.0.2"
       }
     },
     "node_modules/@types/json5": {
@@ -911,13 +920,11 @@
       "license": "MIT"
     },
     "node_modules/argparse": {
-      "version": "1.0.10",
-      "resolved": "https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz",
-      "integrity": "sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==",
-      "license": "MIT",
-      "dependencies": {
-        "sprintf-js": "~1.0.2"
-      }
+      "version": "2.0.1",
+      "resolved": "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz",
+      "integrity": "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==",
+      "dev": true,
+      "license": "Python-2.0"
     },
     "node_modules/aria-query": {
       "version": "5.1.3",
@@ -1572,9 +1579,9 @@
       }
     },
     "node_modules/debug": {
-      "version": "4.3.6",
-      "resolved": "https://registry.npmjs.org/debug/-/debug-4.3.6.tgz",
-      "integrity": "sha512-O/09Bd4Z1fBrU4VzkhFqVgpPzaGbw6Sm9FEkBT1A/YBXQFGuuSxa1dN2nxgxS34JmKXqYx8CZAwEVoJFImUXIg==",
+      "version": "4.3.5",
+      "resolved": "https://registry.npmjs.org/debug/-/debug-4.3.5.tgz",
+      "integrity": "sha512-pt0bNEmneDIvdL1Xsd9oDQ/wrQRkXDT4AUWlNZNPKvW5x/jyO9VFXkJUP07vQ2upmw5PlaITaPKc31jK13V+jg==",
       "dev": true,
       "license": "MIT",
       "dependencies": {
@@ -3498,13 +3505,6 @@
         "js-yaml": "bin/js-yaml.js"
       }
     },
-    "node_modules/js-yaml/node_modules/argparse": {
-      "version": "2.0.1",
-      "resolved": "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz",
-      "integrity": "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==",
-      "dev": true,
-      "license": "Python-2.0"
-    },
     "node_modules/json-buffer": {
       "version": "3.0.1",
       "resolved": "https://registry.npmjs.org/json-buffer/-/json-buffer-3.0.1.tgz",
@@ -5203,9 +5203,9 @@
       }
     },
     "node_modules/tailwindcss": {
-      "version": "3.4.7",
-      "resolved": "https://registry.npmjs.org/tailwindcss/-/tailwindcss-3.4.7.tgz",
-      "integrity": "sha512-rxWZbe87YJb4OcSopb7up2Ba4U82BoiSGUdoDr3Ydrg9ckxFS/YWsvhN323GMcddgU65QRy7JndC7ahhInhvlQ==",
+      "version": "3.4.6",
+      "resolved": "https://registry.npmjs.org/tailwindcss/-/tailwindcss-3.4.6.tgz",
+      "integrity": "sha512-1uRHzPB+Vzu57ocybfZ4jh5Q3SdlH7XW23J5sQoM9LhE9eIOlzxer/3XPSsycvih3rboRsvt0QCmzSrqyOYUIA==",
       "dev": true,
       "license": "MIT",
       "dependencies": {

@@ -33,10 +33,10 @@ video {
 }
 
 .imageSection {
-  padding: 16px;
   background: #f7f7f7;
-  border-radius: 8px;
+  border-radius: 12px;
 }
+
 
 
 
@@ -64,3 +64,17 @@ video {
 .btn-danger {
   background-color: red;
 } */
+
+.guides{
+  border-radius: 12px;
+}
+
+.navigation {
+  margin-top: -15px;
+}
+
+
+.a1{
+  background-color: #242C36;
+}
+
