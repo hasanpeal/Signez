@@ -37,3 +37,30 @@ video {
   background: #f7f7f7;
   border-radius: 8px;
 }
+
+
+
+
+
+
+
+
+
+
+.btn {
+  padding: 8px 16px;
+  margin: 4px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+
+  cursor: pointer;
+}
+
+/* .btn-danger:hover {
+  background-color: darkred;
+}
+
+.btn-danger {
+  background-color: red;
+} */

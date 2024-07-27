@@ -181,6 +181,24 @@ export default function Dashboard() {
     });
   };
 
+  const resetScoreAtIndex = (index: number) => {
+    setScores((prevScores) => {
+      if (index >= 0 && index < prevScores.length) {
+        const newScores = [...prevScores];
+        newScores[index] = 0;
+        updateScoreInServer(newScores);
+        return newScores;
+      }
+      return prevScores;
+    });
+  };
+
+  const resetAllScores = () => {
+    const newScores = Array(26).fill(0);
+    setScores(newScores);
+    updateScoreInServer(newScores);
+  };
+
   const updateScoreInServer = async (updatedScores: number[]) => {
     try {
       const response = await axios.post(
@@ -231,7 +249,10 @@ export default function Dashboard() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <div className="relative itemLeft text-black p-4 overflow-y-auto bg-white shadow-lg">
+      <div
+        className="relative itemLeft text-black p-4 overflow-y-auto bg-white shadow-lg"
+        style={{ width: "250px" }}
+      >
         <div className="leftDiv">
           {alphabet.map((item, index) => {
             if (item === "Dashboard") {
@@ -317,6 +338,24 @@ export default function Dashboard() {
                   </option>
                 ))}
               </select>
+            </div>
+            <h3 className="font-bold text-lg mb-2">Reset Score:</h3>
+            <div className="flex flex-wrap justify-center">
+              {alphabet.slice(1).map((letter, index) => (
+                <button
+                  key={letter}
+                  onClick={() => resetScoreAtIndex(index)}
+                  className="btn btn-active btn-square btn-neutral"
+                >
+                  {letter}
+                </button>
+              ))}
+              <button
+                onClick={resetAllScores}
+                className="m-1 p-2 bg-red-700 text-white rounded"
+              >
+                Reset All
+              </button>
             </div>
           </div>
         </div>
