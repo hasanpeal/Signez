@@ -141,7 +141,7 @@ export default function Dashboard() {
 
   const sendFrameToServer = async (frame: string) => {
     try {
-      const response = await axios.post("http://127.0.0.1:5000/predict", {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_FLASK}/predict`, {
         image: frame,
       });
       if (response.data && response.data.prediction) {
