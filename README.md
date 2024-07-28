@@ -1,9 +1,9 @@
 
-# Signez - Sign Language Recognition and Translation
+# Signez - Interactive ASL Alphabet Learning with Real-Time Hand Sign Recognition
 
 [![Live Site](https://img.shields.io/badge/Signez-Live_Site-brightgreen)](https://signez.vercel.app/)
 
-Welcome to Signez, an innovative sign language recognition and translation application that integrates a sophisticated machine learning model with a full-stack web application. This README provides a detailed overview of the project, including its machine learning model and full-stack integration.
+Welcome to Signez, an innovative application designed for interactive ASL alphabet learning with real-time hand sign recognition. Signez integrates a sophisticated machine learning model with a full-stack web application to provide percentage match, predicted word, scores, and a dashboard for tracking progress. This README provides a detailed overview of the project, including its machine learning model and full-stack integration.
 
 ## Table of Contents
 
