@@ -297,7 +297,7 @@ passport.use(
     {
       clientID: process.env.CLIENT!,
       clientSecret: process.env.SECRET!,
-      callbackURL: `http://localhost:3001/auth/google/callback`,
+      callbackURL: `${process.env.CLIENT_URL}/auth/google/callback`,
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -370,7 +370,7 @@ app.get("/auth/google/callback", (req, res, next) => {
       // User exists
       if (req.query.signup === "true") {
         return res.redirect(
-          `http://localhost/3000/signup/?code=1&message=User%20already%20exists`
+          `${process.env.CLIENT_URL}/signup/?code=1&message=User%20already%20exists`
         );
       } else {
         req.logIn(user, (err) => {
@@ -378,7 +378,7 @@ app.get("/auth/google/callback", (req, res, next) => {
             return next(err);
           }
           return res.redirect(
-            `http://localhost:3000/signin/?code=0&message=Login%20successful&emails=${email}`
+            `${process.env.CLIENT_URL}/signin/?code=0&message=Login%20successful&emails=${email}`
           );
         });
       }
@@ -390,12 +390,12 @@ app.get("/auth/google/callback", (req, res, next) => {
             return next(err);
           }
           return res.redirect(
-            `http://localhost:3000/signup/?code=0&message=Sign%20up%20successful&email=${email}`
+            `${process.env.CLIENT_URL}/signup/?code=0&message=Sign%20up%20successful&email=${email}`
           );
         });
       } else {
         return res.redirect(
-          `http://localhost:3000/signin/?code=1&message=User%20does%20not%20exist`
+          `${process.env.CLIENT_URL}/signin/?code=1&message=User%20does%20not%20exist`
         );
       }
     }
