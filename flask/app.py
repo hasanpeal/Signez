@@ -7,7 +7,7 @@ import pickle
 import base64
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://signez.vercel.app"}})
+CORS(app)
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False, min_detection_confidence=0.3, min_tracking_confidence=0.5)
@@ -74,4 +74,4 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(host='localhost', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

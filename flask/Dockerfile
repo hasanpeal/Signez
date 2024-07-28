@@ -22,6 +22,8 @@ RUN apt-get update && apt-get install -y \
 # Copy the rest of the application code into the container
 COPY . .
 
+# Set environment variables for Flask
+ENV FLASK_APP=app.py
+
 # Command to run the application
-# CMD ["python", "app.py"]
-CMD ["flask", "run"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
