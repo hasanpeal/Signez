@@ -1,7 +1,8 @@
-
-# Signez - Interactive ASL Alphabet Learning with Real-Time Hand Sign Recognition
+# Signez - Interactive ASL Alphabet Learning powered by Real-Time Hand Sign Recognition
 
 [![Live Site](https://img.shields.io/badge/Signez-Live_Site-brightgreen)](https://signez.vercel.app/)
+
+![Signez Banner](SignLangModel/signezCover.png)
 
 Welcome to Signez, an innovative application designed for interactive ASL alphabet learning with real-time hand sign recognition. Signez integrates a sophisticated machine learning model with a full-stack web application to provide percentage match, predicted word, scores, and a dashboard for tracking progress. This README provides a detailed overview of the project, including its machine learning model and full-stack integration.
 
