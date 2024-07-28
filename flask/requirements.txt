@@ -1,0 +1,6 @@
+Flask
+flask-cors
+opencv-python-headless
+mediapipe
+numpy
+pickle-mixin
