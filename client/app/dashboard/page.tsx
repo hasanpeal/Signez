@@ -287,7 +287,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="flex-grow itemRight text-black p-4 flex flex-col bg-white shadow-lg">
-        <div className="flex mb-4">
+        <div className="flex mb-2">
           <div style={{ position: "relative", flex: 1 }}>
             <video
               ref={videoRef}
