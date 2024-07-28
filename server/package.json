@@ -21,6 +21,7 @@
     "express-session": "^1.18.0",
     "mailersend": "^2.2.0",
     "node-mailjet": "^6.0.5",
+    "nodemon": "^3.1.4",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0",
