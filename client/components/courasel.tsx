@@ -3,11 +3,12 @@ import Image from "next/image";
 import A1 from "@/public/A1.png";
 import A2 from "@/public/A2.png";
 import A3 from "@/public/A3.png";
+import A4 from "@/public/A4.png";
 import "@/components/courasel.css";
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = [A1, A2, A3];
+  const images = [A1, A2, A3, A4];
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
