@@ -23,4 +23,5 @@ RUN apt-get update && apt-get install -y \
 COPY . .
 
 # Command to run the application
-CMD ["python", "app.py"]
+# CMD ["python", "app.py"]
+CMD ["flask", "run"]
