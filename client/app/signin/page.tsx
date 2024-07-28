@@ -171,9 +171,12 @@ export default function Signin() {
 
   const generateOtp = async () => {
     try {
-      const result = await axios.post(`http://localhost:3001/sentOTP`, {
-        email: email,
-      });
+      const result = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER}/sentOTP`,
+        {
+          email: email,
+        }
+      );
       setGeneratedOtp(result.data.otp);
     } catch (error) {
       // console.log("Error calling http://localhost:3000/sentOTP on login.tsx");

@@ -88,7 +88,7 @@ const Signup: React.FC = () => {
   async function emailAlreadyExist() {
     try {
       const result = await axios.get(
-        `http://localhost:3001/validateEmail`,
+        `${process.env.NEXT_PUBLIC_SERVER}/validateEmail`,
         {
           params: { email: email },
         }
@@ -183,7 +183,7 @@ const Signup: React.FC = () => {
         try {
           setLoad(true);
           const result = await axios.post(
-            `http://localhost:3001/register`,
+            `${process.env.NEXT_PUBLIC_SERVER}/register`,
             {
               firstName,
               lastName,
@@ -210,9 +210,12 @@ const Signup: React.FC = () => {
 
   const generateOtp = async () => {
     try {
-      const result = await axios.post(`http://localhost:3001/sentOTP`, {
-        email: email,
-      });
+      const result = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER}/sentOTP`,
+        {
+          email: email,
+        }
+      );
       setGeneratedOtp(result.data.otp);
     } catch (error) {
       console.log("Error calling http://localhost:3000/sentOTP on signup.tsx");
