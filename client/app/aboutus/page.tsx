@@ -75,7 +75,7 @@ export default function AboutUs() {
           </h2>
           <div className="space-y-8">
             <div>
-              <h4 className="text-2xl font-semibold text-gray-800 mb-2">
+              <h4 className="text-2xl font-semibold text-gray-800 mb-2 text-center">
                 What is Signez?
               </h4>
               <p className="text-gray-600 text-lg">
@@ -84,7 +84,7 @@ export default function AboutUs() {
               </p>
             </div>
             <div>
-              <h4 className="text-2xl font-semibold text-gray-800 mb-2">
+              <h4 className="text-2xl font-semibold text-gray-800 mb-2 text-center">
                 How does the real-time feedback work?
               </h4>
               <p className="text-gray-600 text-lg">
@@ -94,7 +94,7 @@ export default function AboutUs() {
               </p>
             </div>
             <div>
-              <h4 className="text-2xl font-semibold text-gray-800 mb-2">
+              <h4 className="text-2xl font-semibold text-gray-800 mb-2 text-center">
                 Can I track my progress?
               </h4>
               <p className="text-gray-600 text-lg">
@@ -103,7 +103,7 @@ export default function AboutUs() {
               </p>
             </div>
             <div>
-              <h4 className="text-2xl font-semibold text-gray-800 mb-2">
+              <h4 className="text-2xl font-semibold text-gray-800 mb-2 text-center">
                 Is Signez suitable for beginners?
               </h4>
               <p className="text-gray-600 text-lg">
