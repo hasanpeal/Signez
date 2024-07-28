@@ -1,6 +1,6 @@
 .itemLeft {
   width: auto;
-  max-width: 300px; /* You can set this to an appropriate value to fit your content */
+  max-width: 300px; 
 }
 
 .leftDiv {
@@ -27,21 +27,6 @@ video {
   background: #f7f7f7;
   border-radius: 8px;
 }
-/* 
-.imageSection {
-  background: #f7f7f7;
-  border-radius: 12px;
-} */
-
-
-
-
-
-
-
-
-
-
 
 .btn {
   padding: 8px 16px;
@@ -53,13 +38,6 @@ video {
   cursor: pointer;
 }
 
-/* .btn-danger:hover {
-  background-color: darkred;
-}
-
-.btn-danger {
-  background-color: red;
-} */
 
 .guides{
   border-radius: 12px;
@@ -68,7 +46,6 @@ video {
 .navigation {
   margin-top: -15px;
 }
-
 
 .a1{
   background-color: #242C36;
