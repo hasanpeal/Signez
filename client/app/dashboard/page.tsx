@@ -139,6 +139,7 @@ export default function Dashboard() {
     return dataUrl.split(",")[1];
   };
 
+  
   const sendFrameToServer = async (frame: string) => {
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_FLASK}/predict`, {
