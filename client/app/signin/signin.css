@@ -1,9 +1,11 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,700");
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
-.mainContainer, .mainContainer2{
+.mainContainer, .mainContainer2, .mainStart{
   font-family: "Raleway", sans-serif;
 }
+
+
 
 .customLabel {
   margin-bottom: -10px;

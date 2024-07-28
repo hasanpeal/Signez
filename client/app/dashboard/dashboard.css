@@ -3,10 +3,6 @@
   max-width: 300px; /* You can set this to an appropriate value to fit your content */
 }
 
-/* .itemRight {
-  border-left: 2px solid #4A00FF;
-} */
-
 .leftDiv {
   display: flex;
   flex-direction: column;
@@ -78,11 +74,3 @@ video {
   background-color: #242C36;
 }
 
-
-
-/* .carousel-item img {
-  object-fit: contain;
-  max-width: 100%;
-  height: auto;
-  display: block;
-} */

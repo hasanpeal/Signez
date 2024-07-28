@@ -8,6 +8,8 @@ import "@/app/signin/signin.css";
 import eye from "@/public/eye.svg";
 import { useRouter } from "next/navigation";
 import { useEmail } from "@/context/UserContext"; 
+import Navbar2 from "@/components/navbar2";
+import Footer2 from "@/components/footer2";
 
 const Signup: React.FC = () => {
   const [flag, setFlag] = useState(true);
@@ -223,14 +225,15 @@ const Signup: React.FC = () => {
   }
 
   return (
-    <div>
-      <div className="mainContainer2 pb-40 mt-20">
+    <div className="mainStart bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+      <Navbar2 />
+      <div className="mainContainer2 pb-40 mt-40">
         <div className="card bg-base-100 w-96 shadow-xl cardDiv">
           <article className="text-center text-xl text-bold mt-4">
             {" "}
             Sign up
           </article>
-          <Toaster/>
+          <Toaster />
           <div>
             <label className="input input-bordered flex items-center gap-2">
               <input
@@ -394,6 +397,7 @@ const Signup: React.FC = () => {
           )}
         </div>
       </div>
+      <Footer2/>
     </div>
   );
 };
