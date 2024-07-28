@@ -203,7 +203,7 @@ export default function Dashboard() {
   const updateScoreInServer = async (updatedScores: number[]) => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/updateAlphabetArray",
+        `${process.env.NEXT_PUBLIC_SERVER}/updateAlphabetArray`,
         {
           email: emailContext,
           alphabetArray: updatedScores,
@@ -221,7 +221,7 @@ export default function Dashboard() {
     const fetchAlphabetArray = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/getAlphabetArray",
+          `${process.env.NEXT_PUBLIC_SERVER}/getAlphabetArray`,
           {
             params: { email: emailContext },
           }

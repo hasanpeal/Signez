@@ -127,7 +127,7 @@ export default function Signin() {
   async function emailDoesntExist() {
     console.log("debug 2", email);
     try {
-      const result = await axios.get("http://localhost:3001/validateEmail", {
+      const result = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}/validateEmail`, {
         params: { email: email },
       });
       const code = result.data.code;
@@ -143,7 +143,7 @@ export default function Signin() {
   const handleLogin = async () => {
     if (await validateForm()) {
       try {
-        const result = await axios.post("http://localhost:3001/login", {
+        const result = await axios.post(`${process.env.NEXT_PUBLIC_SERVER}/login`, {
           email,
           password,
         });
@@ -375,7 +375,7 @@ export default function Signin() {
   async function resetPassword() {
     if (validateNewPassword()) {
       try {
-        const result = await axios.post("http://localhost:3001/resetPassword", {
+        const result = await axios.post(`${process.env.NEXT_PUBLIC_SERVER}/resetPassword`, {
           email: email,
           newPassword: confirmNewPassword,
         });
@@ -401,7 +401,7 @@ export default function Signin() {
     }
   }
   async function googleOauth() {
-    window.location.href = "http://localhost:3001/auth/google/signin";
+    window.location.href = `${process.env.NEXT_PUBLIC_SERVER}/auth/google/signin`;
   }
 
   return (
