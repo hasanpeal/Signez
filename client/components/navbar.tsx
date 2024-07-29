@@ -10,23 +10,6 @@ export default function Navbar() {
           Signez
         </Link>
         <nav className="space-x-4 buttonss">
-          <Link href="/aboutus" className="text-gray-800 font-semibold">
-            {" "}
-            About Us
-          </Link>
-          <button
-            onClick={() => {
-              const modal = document.getElementById(
-                "contact_modal"
-              ) as HTMLDialogElement;
-              if (modal) {
-                modal.showModal();
-              }
-            }}
-            className="text-gray-800 font-semibold"
-          >
-            Contact Us
-          </button>
           <Link href="/signin">
             <button className="text-gray-800 font-semibold sButton">
               Sign In
