@@ -1,6 +1,6 @@
 "use client";
-import Link from "next/link";
 import Head from "next/head";
+import Link from "next/link";
 import "@/app/home.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -9,13 +9,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100 homeMain">
       {/* Navbar */}
-      <Head>
-        <title>Signez</title>
-        <meta
-          name="description"
-          content="Signez is a real-time sign language learning platform that uses advanced machine learning models to provide accurate predictions."
-        />
-      </Head>
       <Navbar />
 
       {/* Hero Section */}
