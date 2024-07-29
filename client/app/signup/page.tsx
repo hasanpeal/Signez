@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useEmail } from "@/context/UserContext"; 
 import Navbar2 from "@/components/navbar2";
 import Footer2 from "@/components/footer2";
+import CookieConsent from "@/components/cookies";
 
 const Signup: React.FC = () => {
   const [flag, setFlag] = useState(true);
@@ -34,30 +35,6 @@ const Signup: React.FC = () => {
   const form = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const { setEmailContext } = useEmail();
-
-  //   React.useEffect(() => {
-  //     const params = new URLSearchParams(window.location.search);
-  //     const code = params.get("code");
-  //     const message = params.get("message");
-  //     const capturedEmail = params.get("email");
-  //     const screen_name = params.get("screen_name");
-
-  //     if (code) {
-  //       if (parseInt(code) === 0) {
-  //         setLoad(true);
-  //         toast.success(message, {
-  //           id: "success1",
-  //         });
-  //         setUsername(screen_name || "");
-  //         setEmail(capturedEmail || "");
-  //         navigate("/newuser", { state: { username, email } });
-  //       } else {
-  //         toast.error(message || "Authentication failed", {
-  //           id: "success3",
-  //         });
-  //       }
-  //     }
-  //   }, [email, navigate, username]);
 
   const handleOtpChange = (index: number, value: string) => {
     if (/^[0-9]$/.test(value)) {
@@ -401,6 +378,7 @@ const Signup: React.FC = () => {
         </div>
       </div>
       <Footer2/>
+      <CookieConsent/>
     </div>
   );
 };

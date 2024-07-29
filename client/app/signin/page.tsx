@@ -11,6 +11,7 @@ import eye from "@/public/eye.svg";
 import { useEmail } from "@/context/UserContext"; 
 import Navbar2 from "@/components/navbar2";
 import Footer2 from "@/components/footer2";
+import CookieConsent from "@/components/cookies";
 
 export default function Signin() {
   const [email, setEmail] = useState("");
@@ -47,63 +48,29 @@ export default function Signin() {
   const form = useRef<HTMLFormElement>(null);
   const { setEmailContext } = useEmail();
   const router = useRouter(); 
-  //   React.useEffect(() => {
-  //     const checkSession = async () => {
-  //       try {
-  //         const response = await axios.get(
-  //           `${process.env.VITE_SERVER}/check-session`,
-  //           { withCredentials: true }
-  //         );
-  //         if (response.data.isAuthenticated) {
-  //           // console.log("Authenticated:", response.data);
-  //           const { email, newUser } = response.data;
-  //           if (newUser) navigate("/newuser", { state: { email } });
-  //           else navigate("/dashboard", { state: { email } });
-  //         } else {
-  //           // console.log("Not authenticated");
-  //         }
-  //       } catch (error) {
-  //         console.error("Error checking session", error);
-  //       }
-  //     };
-  //     checkSession();
-  //   }, [navigate]);
 
-  //   React.useEffect(() => {
-  //     const params = new URLSearchParams(window.location.search);
-  //     const code = params.get("code");
-  //     const message = params.get("message");
-  //     const capturedEmail = params.get("email");
-  //     const capturedUsername = params.get("screen_name");
-  //     document.title = "Tweetipy | Login";
-  //     if (code) {
-  //       if (parseInt(code) === 0) {
-  //         setEmail(capturedEmail || "");
-  //         setUserName(capturedUsername || "");
-  //         setLoad(true);
-  //         toast.success(message, {
-  //           id: "success1",
-  //         });
-  //         const fetchData = async () => {
-  //           const res = await axios.get(
-  //             `${import.meta.env.VITE_SERVER}/isNewUser`,
-  //             {
-  //               params: { email: email },
-  //             }
-  //           );
-  //           // console.log(res.data.bool);
-  //           if (res.data.bool)
-  //             navigate("/newuser", { state: { email, username } });
-  //           else navigate("/dashboard", { state: { email, username } });
-  //         };
-  //         fetchData();
-  //       } else {
-  //         toast.error(message || "Authentication failed", {
-  //           id: "success3",
-  //         });
-  //       }
-  //     }
-  //   }, [email, navigate, username]);
+    React.useEffect(() => {
+      const checkSession = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_SERVER}/check-session`,
+            { withCredentials: true }
+          );
+          if (response.data.isAuthenticated) {
+            console.log("Authenticated:", response.data);
+            const { email } = response.data;
+            setEmailContext(email);
+            router.push("/dashboard");
+          } else {
+            console.log("Not authenticated");
+          }
+        } catch (error) {
+          console.error("Error checking session", error);
+        }
+      };
+      checkSession();
+    },[]);
+
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
@@ -726,6 +693,7 @@ export default function Signin() {
         </div>
       </div>
       <Footer2/>
+      <CookieConsent/>
     </div>
   );
 }

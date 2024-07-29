@@ -9,6 +9,8 @@ import "@tensorflow/tfjs-backend-cpu";
 import "@/app/dashboard/dashboard.css";
 import { useEmail } from "@/context/UserContext";
 import Carousel from "@/components/courasel";
+import CookieConsent from "@/components/cookies";
+
 export default function Dashboard() {
   const alphabet = [
     "Dashboard",
@@ -50,7 +52,28 @@ export default function Dashboard() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef<any>(null);
   const selectedAlphabetRef = useRef<string>(selectedAlphabet);
-  const { emailContext } = useEmail();
+  const { emailContext, setEmailContext } = useEmail();
+
+  React.useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER}/check-session`,
+          { withCredentials: true }
+        );
+        if (response.data.isAuthenticated) {
+          console.log("Authenticated:", response.data);
+          const { email } = response.data;
+          setEmailContext(email);
+        } else {
+          console.log("Not authenticated");
+        }
+      } catch (error) {
+        console.error("Error checking session", error);
+      }
+    };
+    checkSession();
+  }, []);
 
   useEffect(() => {
     const loadModelAndSetupCamera = async () => {
@@ -366,6 +389,7 @@ export default function Dashboard() {
           <Carousel />
         </div>
       </div>
+      <CookieConsent/>
     </div>
   );
 }

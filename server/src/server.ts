@@ -36,7 +36,8 @@ const redisStore = new RedisStore({
   client: redisClient,
 });
 
-app.set("trust proxy", 1); // Trust the first proxy
+// Trust the first proxy
+app.set("trust proxy", 1); 
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -252,20 +253,6 @@ app.post("/resetPassword", async (req, res) => {
   }
 });
 
-// Check session route
-app.get("/check-session", (req, res) => {
-  console.log("Directed to get route to check session");
-  if (req.isAuthenticated()) {
-    console.log("User is authenticated");
-    const user = req.user as { email: string };
-    const email = user.email;
-    res.status(200).json({ isAuthenticated: true, email });
-  } else {
-    console.log("User is not authenticated");
-    res.status(200).json({ isAuthenticated: false });
-  }
-});
-
 // POST Route for sending OTP
 app.post("/sentOTP", async (req, res) => {
   console.log("Directed to POST Route -> /sentOTP");
@@ -472,6 +459,37 @@ app.post("/updateAlphabetArray", async (req, res) => {
       err
     );
     res.status(500).json({ code: 1, message: "Error updating alphabet array" });
+  }
+});
+
+// Route to check cookie consent
+app.get("/getCookieConsent", (req, res) => {
+  const consent = req.session.cookieConsent;
+  res.status(200).json({ code: 0, consent });
+});
+
+// Route to update cookie consent
+app.post("/updateCookieConsent", (req, res) => {
+  console.log("Directed to POST Route -> /updateCookieConsent");
+  const { consent } = req.body;
+
+  // Store consent in session
+  req.session.cookieConsent = consent;
+
+  res.status(200).json({ code: 0, message: "Cookie consent updated" });
+});
+
+// Check session route
+app.get("/check-session", (req, res) => {
+  console.log("Directed to get route to check session");
+  if (req.isAuthenticated()) {
+    console.log("User is authenticated");
+    const user = req.user as { email: string };
+    const email = user.email;
+    res.status(200).json({ isAuthenticated: true, email });
+  } else {
+    console.log("User is not authenticated");
+    res.status(200).json({ isAuthenticated: false });
   }
 });
 

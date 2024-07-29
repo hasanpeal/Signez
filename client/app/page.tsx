@@ -4,6 +4,7 @@ import Link from "next/link";
 import "@/app/home.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import CookieConsent from "@/components/cookies";
 
 export default function Home() {
   return (
@@ -178,6 +179,7 @@ export default function Home() {
 
       {/* Footer */}
       <Footer />
+      <CookieConsent/>
     </div>
   );
 }
