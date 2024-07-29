@@ -57,15 +57,15 @@ export default function Signin() {
             { withCredentials: true }
           );
           if (response.data.isAuthenticated) {
-            console.log("Authenticated:", response.data);
+            // console.log("Authenticated:", response.data);
             const { email } = response.data;
             setEmailContext(email);
             router.push("/dashboard");
           } else {
-            console.log("Not authenticated");
+            // console.log("Not authenticated");
           }
         } catch (error) {
-          console.error("Error checking session", error);
+          console.error(error);
         }
       };
       checkSession();
@@ -92,18 +92,18 @@ export default function Signin() {
   }, [router, setEmailContext]);
 
   async function emailDoesntExist() {
-    console.log("debug 2", email);
+    // console.log("debug 2", email);
     try {
       const result = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}/validateEmail`, {
         params: { email: email },
       });
       const code = result.data.code;
-      console.log("Email exist code: ", code);
+      // console.log("Email exist code: ", code);
       return code !== 0;
     } catch (err) {
       // console.log("Error in emailAlreadyExist function");
       return true;
-      console.log("Error triggered");
+      // console.log("Error triggered");
     }
   }
 
@@ -193,7 +193,7 @@ export default function Signin() {
 
   async function validateEmail() {
     const exist = await emailDoesntExist();
-    console.log("Debug 1", exist);
+    // console.log("Debug 1", exist);
     const errors = {
       email: "",
     };
@@ -212,7 +212,7 @@ export default function Signin() {
       }, 3000);
     } else {
       const exist = await emailDoesntExist();
-      console.log("Debug 1", exist);
+      // console.log("Debug 1", exist);
       if (exist) {
         errors.email = "Email isn't registered";
         isValid = false;
@@ -327,9 +327,9 @@ export default function Signin() {
     // console.log("Handle send function triggered");
     // console.log(formErrors);
 
-    console.log("Handle send function triggered");
+    // console.log("Handle send function triggered");
     const isEmailValid = await validateEmail();
-    console.log("Debug 2", isEmailValid);
+    // console.log("Debug 2", isEmailValid);
     if (await validateEmail()) {
       generateOtp();
       setShowOtp(true);

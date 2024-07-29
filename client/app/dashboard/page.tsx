@@ -62,11 +62,11 @@ export default function Dashboard() {
           { withCredentials: true }
         );
         if (response.data.isAuthenticated) {
-          console.log("Authenticated:", response.data);
+          // console.log("Authenticated:", response.data);
           const { email } = response.data;
           setEmailContext(email);
         } else {
-          console.log("Not authenticated");
+          // console.log("Not authenticated");
         }
       } catch (error) {
         console.error("Error checking session", error);
@@ -172,9 +172,9 @@ export default function Dashboard() {
         setPredictedWord(response.data.prediction);
         let word = response.data.prediction as string;
         const matchPercentage = calculateMatchPercentage(word);
-        console.log(`Selected Alphabet: ${selectedAlphabetRef.current}`);
-        console.log(`Predicted Word: ${word}`);
-        console.log(`Match Percentage: ${matchPercentage}`);
+        // console.log(`Selected Alphabet: ${selectedAlphabetRef.current}`);
+        // console.log(`Predicted Word: ${word}`);
+        // console.log(`Match Percentage: ${matchPercentage}`);
         setMatchPercentage(matchPercentage);
         if (matchPercentage === 100) {
           updateScoreAtIndex(word.charCodeAt(0) - "A".charCodeAt(0));

@@ -174,7 +174,7 @@ const Signup: React.FC = () => {
             router.push("/signin");
           }
         } catch (error) {
-          console.log("Error registering user froms signup.tsx");
+          console.log(error);
         }
       } else {
         setVerified(true);
@@ -195,9 +195,9 @@ const Signup: React.FC = () => {
       );
       setGeneratedOtp(result.data.otp);
     } catch (error) {
-      console.log("Error calling http://localhost:3000/sentOTP on signup.tsx");
+      console.log(error);
     }
-    console.log("OTP generated");
+    // console.log("OTP generated");
   };
 
   function googleOauth(): void {
