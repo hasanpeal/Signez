@@ -1,5 +1,5 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.9-slim
+FROM python:3.9
 
 # Set the working directory
 WORKDIR /app
@@ -20,7 +20,6 @@ RUN apt-get update && apt-get install -y \
     libsm6 \
     libxext6 \
     libxrender-dev \
-    libglib2.0-0 \
     libgthread-2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
