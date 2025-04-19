@@ -17,6 +17,11 @@ RUN pip install --no-cache-dir --verbose -r requirements.txt
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libglib2.0-0 \
+    libgthread-2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the rest of the application code into the container
