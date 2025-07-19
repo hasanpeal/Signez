@@ -21,20 +21,20 @@ const mailjet = new Mailjet({
   apiSecret: process.env.MAIL_PRIVATE,
 });
 // Redis client setup
-const redisClient = createClient({
-  url: process.env.REDIS,
-});
-redisClient.on("error", (err: any) => console.log("Redis Client Error", err));
+// const redisClient = createClient({
+//   url: process.env.REDIS,
+// });
+// redisClient.on("error", (err: any) => console.log("Redis Client Error", err));
 
-(async () => {
-  await redisClient.connect();
-  console.log("Connected to Redis");
-})();
+// (async () => {
+//   await redisClient.connect();
+//   console.log("Connected to Redis");
+// })();
 
 // Initialize Redis store
-const redisStore = new RedisStore({
-  client: redisClient,
-});
+// const redisStore = new RedisStore({
+//   client: redisClient,
+// });
 
 // Trust the first proxy
 app.set("trust proxy", 1); 
@@ -121,7 +121,7 @@ declare module "express-session" {
 
 app.use(
   session({
-    store: redisStore,
+    // store: redisStore,
     secret: process.env.SESSION_SECRET || "secret",
     resave: false,
     saveUninitialized: false,
